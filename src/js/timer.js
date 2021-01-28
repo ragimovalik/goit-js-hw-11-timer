@@ -9,13 +9,6 @@ const inputObject = [
 
 const markup = template(inputObject);
 
-const refs = {
-  days: document.querySelector('span[data-value="days"]'),
-  hours: document.querySelector('span[data-value="hours"]'),
-  mins: document.querySelector('span[data-value="mins"]'),
-  secs: document.querySelector('span[data-value="secs"]'),
-};
-
 class CountdownTimer {
   constructor({ selector, targetDate }) {
     this.selector = selector;
@@ -28,6 +21,11 @@ class CountdownTimer {
     setInterval(() => {
       const currentTime = new Date();
       const diffTime = this.targetDate - currentTime;
+
+      if (diffTime <= 0) {
+        return this.calculator(0);
+      }
+
       const time = this.calculator(diffTime);
 
       this.countdown(time);
@@ -37,8 +35,18 @@ class CountdownTimer {
   setMarkup() {
     const targetSelector = this.selector;
     const timerEl = document.querySelector(`${targetSelector}`);
+    const targetDateEl = document.querySelector('.main__description');
 
     timerEl.insertAdjacentHTML('afterbegin', markup);
+
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+
+    const dateToShow = this.targetDate.toLocaleString('en-US', options);
+    targetDateEl.textContent = `Target date is ${dateToShow}`;
   }
 
   calculator(time) {

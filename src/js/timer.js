@@ -13,6 +13,13 @@ class CountdownTimer {
   constructor({ selector, targetDate }) {
     this.selector = selector;
     this.targetDate = targetDate;
+
+    this.refs = {
+      days: '',
+      hours: '',
+      mins: '',
+      secs: '',
+    };
   }
 
   init() {
@@ -47,6 +54,15 @@ class CountdownTimer {
 
     const dateToShow = this.targetDate.toLocaleString('en-US', options);
     targetDateEl.textContent = `Target date is ${dateToShow}`;
+
+    this.refs = {
+      days: document.querySelector('span[data-value="days"]'),
+      hours: document.querySelector('span[data-value="hours"]'),
+      mins: document.querySelector('span[data-value="mins"]'),
+      secs: document.querySelector('span[data-value="secs"]'),
+    };
+
+    this.refs.secs.nextElementSibling.textContent = '';
   }
 
   calculator(time) {
@@ -61,18 +77,10 @@ class CountdownTimer {
   }
 
   countdown({ days, hours, mins, secs }) {
-    const refs = {
-      days: document.querySelector('span[data-value="days"]'),
-      hours: document.querySelector('span[data-value="hours"]'),
-      mins: document.querySelector('span[data-value="mins"]'),
-      secs: document.querySelector('span[data-value="secs"]'),
-    };
-
-    refs.days.textContent = days;
-    refs.hours.textContent = hours;
-    refs.mins.textContent = mins;
-    refs.secs.textContent = secs;
-    refs.secs.nextElementSibling.textContent = '';
+    this.refs.days.textContent = days;
+    this.refs.hours.textContent = hours;
+    this.refs.mins.textContent = mins;
+    this.refs.secs.textContent = secs;
   }
 
   pad(value) {
@@ -93,4 +101,9 @@ const timer2 = new CountdownTimer({
   targetDate: new Date('Jan 1, 2022'),
 });
 
-timer2.init(); */
+timer2.init();
+*/
+/* Mentor: Не оптимально обращаться каждую секунду к ДОМ - дереву.
+Передавайте в класс ссылку на объкт refs при инициализации класса 
+или вынесите объект refs в конструктор
+*/
